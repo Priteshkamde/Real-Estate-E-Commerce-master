@@ -1,0 +1,20 @@
+<a href="{% url 'ecommerce:index' %}">Home</a>
+{% if user.is_authenticated %}
+<p>Signed in as {{ user.username }}
+    <a class="btn btn-primary text-dark" href="{% url 'ecommerce:logout_user' %}">Logout</a>
+    {% ifequal user.type 'seller' %}
+    <a href="{% url 'ecommerce:post_property' %}">Post</a>
+    {% endifequal %}
+<h3>{{ user.first_name }} {{ user.last_name }}</h3>
+{% ifequal user.type 'seller' %}
+<ul>
+    {% for property in properties %}
+    {% ifequal property.user user %}
+    <li><a href="{% url 'ecommerce:property_details' pk=property.id %}">{{ property }}</a></li>
+    {% endifequal %}
+    {% endfor %}
+</ul>
+{% endifequal %}
+{% else %}
+<a class="btn btn-primary text-dark" href="{% url 'ecommerce:login_user' %}">Login</a>
+{% endif %}

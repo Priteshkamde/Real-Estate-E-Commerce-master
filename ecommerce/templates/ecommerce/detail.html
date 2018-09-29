@@ -1,0 +1,16 @@
+<a href="{% url 'ecommerce:index' %}">Home</a>
+{% if user.is_authenticated %}
+<p>Signed in as {{ user.username }}
+    <a class="btn btn-primary text-dark" href="{% url 'ecommerce:logout_user' %}">Logout</a>
+    <a class="btn btn-primary text-dark" href="{% url 'ecommerce:dashboard' %}">Dashboard</a>
+{% else %}
+    <a class="btn btn-primary text-dark" href="{% url 'ecommerce:login_user' %}">Login</a>
+{% endif %}
+
+<ul>
+    {% for property in properties %}
+    <li><a href="{% url 'ecommerce:property_details' pk=property.id %}">{{ property }}</a></li>
+    {% endfor %}
+</ul>
+
+

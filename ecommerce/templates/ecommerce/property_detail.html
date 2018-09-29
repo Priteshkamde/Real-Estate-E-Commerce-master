@@ -1,0 +1,101 @@
+{% if user.is_authenticated %}
+<p>Signed in as {{ user.username }}
+<a class="btn btn-primary text-dark" href="{% url 'ecommerce:logout_user' %}">Logout</a>
+{% endif %}
+<h1>{{ property.property_title }}</h1>
+<h3>Locality: {{ property.locality }}</h3>
+<h4>for {{ property.buy_rent }}</h4>
+<h4>Type:{{ property.property_type }}</h4>
+<h4>Price: Rs. {{ property.price }}</h4>
+<h4>BHK: {{ property.BHK }}</h4>
+<h4>Construction Status: {{ property.construction_status }}</h4>
+<h4>Area: {{ property.area }} sq. ft.</h4>
+<h4>Address: {{ property.address }}</h4>
+<h4>Description: {{ property.description }}</h4>
+
+{% if user.is_authenticated %}
+    {% ifequal user.type 'buyer' %}
+        <h4>Owner Name: {{ property.user.username }}</h4>
+        <h4>Owner Contact: {{ property.user.contact }}</h4>
+    {% else %}
+        <p>You need to be a registered buyer to see the post owner's contact details. Login <a href="{% url 'ecommerce:login_user' %}">here</a></p>
+    {% endifequal %}
+{% else %}
+<p>You need to be a registered buyer to see the post owner's contact details. Login <a href="{% url 'ecommerce:login_user' %}">here</a></p>
+{% endif %}
+
+<div class="card-header">
+    <strong>Comments:</strong>
+</div>
+
+<div class="card-body">
+    <ul class="list-group">
+        {% for comment in comments %}
+        {% ifequal comment.property_title property.property_title %}
+        <li class="list-group-item">
+            <h6>
+                {{ comment.user }}
+                <small>{{ comment.datetime }}</small>
+            </h6>
+            <p>{{ comment.comment }}</p>
+        </li>
+        {% endifequal %}
+        {% endfor %}
+    </ul>
+    <form class="form-horizontal" role="form" action="#comments" method="post"
+          enctype="multipart/form-data">
+        {% csrf_token %}
+        <br>
+        {% if user.is_authenticated %}
+        {% ifequal user.type 'buyer' %}
+        <textarea class="form-control form-control-md" id="a" name="a" placeholder="Your Comment" required></textarea>
+        <div class="form-row">
+            <div class="form-group">
+                <div class="col-sm-offset-1 col-sm-10">
+                    <br>
+                    <button type="submit" class="btn btn-success">
+                        <span>Submit</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <label for="a">
+            <span>You need to be a registered buyer to post a comment. Login <a href="{% url 'ecommerce:login_user' %}">here</a></span>
+        </label>
+        <br>
+        <textarea class="form-control form-control-md" id="a" name="a"
+                  placeholder="Your Comment" disabled>
+                            </textarea>
+        <div class="form-row">
+            <div class="form-group">
+                <div class="col-sm-offset-1 col-sm-10">
+                    <br>
+                    <button type="submit" class="btn btn-success" disabled>
+                        <span>Submit</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% endifequal %}
+        {% else %}
+        <label for="a">
+            <span>You need to be a registered buyer to post a comment. Login <a href="{% url 'ecommerce:login_user' %}">here</a></span>
+        </label>
+        <br>
+        <textarea class="form-control form-control-md" id="a" name="a"
+                  placeholder="Your Comment" disabled>
+                            </textarea>
+        <div class="form-row">
+            <div class="form-group">
+                <div class="col-sm-offset-1 col-sm-10">
+                    <br>
+                    <button type="submit" class="btn btn-success" disabled>
+                        <span>Submit</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </form>
+</div>

@@ -1,0 +1,83 @@
+{% load static %}
+<html>
+<head> 
+	<link rel="stylesheet" href="{% static 'css/stylesearch.css' %}">
+     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+</head>
+
+
+
+
+
+
+
+
+<div class="card text-white bg-primary">
+  <div class="card-header">
+    {% if user.is_authenticated %}
+	<p class="lead">Signed in as <span class="badge badge-dark">{{ user.username }}</span>
+	</p>
+ </div>
+</div>
+
+
+
+
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">REES</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+
+
+       <li class="nav-item">
+        	<a class="nav-link" href="{% url 'ecommerce:dashboard' %}">Dashboard</a>
+      </li>
+
+
+      <li class="nav-item">
+     		 <a class="nav-link" href="{% url 'ecommerce:logout_user' %}">Logout</a>
+      </li>
+
+
+
+
+
+
+	{% else %}
+	    <li class="nav-item">
+	    <a class="btn btn-primary text-dark" href="{% url 'ecommerce:login_user' %}">Login</a>
+		</li>
+	{% endif %}
+	{% ifequal user.type 'seller' %}
+		<li class="nav-item">
+	    <a class="nav-link" href="{% url 'ecommerce:post_property' %}">Post</a>
+		</li>
+	{% endifequal %}
+     
+      
+
+
+    <form class="form-inline my-2 my-lg-0 text-center">
+
+      <form action="{% url 'ecommerce:detail' %}" method="get">
+		    {% csrf_token %}
+		    <input class="form-control mr-sm-2" id="q" name="q" placeholder="search" type="search">
+		    <button class="btn btn-outline-success my-2 my-sm-0 text-center" type="submit">Search</button>
+	  </form>
+
+
+    </form> 
+  </div>
+</nav>
+
+<div id="backg">
+	</div>

@@ -1,0 +1,166 @@
+{% load static %}
+<head>
+    <link rel="stylesheet" href="{% static 'css/stylepostproperty.css' %}">
+     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+</head>
+
+
+<div class="card text-white bg-primary">
+  <div class="card-header">
+    {% if user.is_authenticated %}
+    <p class="lead"> Post Property
+    </p>
+ </div>
+</div>
+    
+
+
+        
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">REES</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+
+    <li class="nav-item">
+            <a class="nav-link" href="{% url 'ecommerce:index' %}">Home</a>
+    </li>
+
+
+      <li class="nav-item">
+            <a class="nav-link" href="{% url 'ecommerce:dashboard' %}">Dashboard</a>
+      </li>
+
+
+      <li class="nav-item">
+             <a class="nav-link" href="{% url 'ecommerce:logout_user' %}">Logout</a>
+      </li>
+              
+    <li class="nav-item">
+    {% ifequal user.type 'seller' %}
+    <a class="nav-link" href="{% url 'ecommerce:logout_user' %}">Logout</a>
+    </li>
+
+    </ul>
+
+</nav>
+<br>
+<br>
+
+<div id="centraldata">
+    
+
+    <form method="post" action="#" id="post_property">
+        {% csrf_token %}
+        <div class="form-group row">
+            <label class="control-label col-sm-2 text-white" for="m">Property Title</label>
+            <div class="col-sm-10">
+                <input type="text" id="m" name="m" placeholder="Title" required>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="control-label col-sm-2 text-white" for="p">Sell/Lease</label>
+            <div class="col-sm-10">
+                <select name="p" id="p" required>
+                    <option></option>
+                    <option value="Buy">Sell</option>
+                    <option value="Rent">Lease</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group row">
+
+            <label class="control-label col-sm-2 text-white" for="q">Locality</label>
+            <div class="col-sm-10">
+                <input type="text" id="q" name="q" placeholder="Locality" required>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="control-label col-sm-2 text-white" for="r">Property Type</label>
+            <div class="col-sm-10">
+                <select id="r" name="r" required>
+                    <option></option>
+                    <option value="Flat">Flat</option>
+                    <option value="House/Villa">House/Villa</option>
+                    <option value="Plot">Plot</option>
+                    <option value="Office Space">Office Space</option>
+                    <option value="Other Commercial">Other Commercial</option>
+                    <option value="Shop/Showroom">Shop/Showroom</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group row text-white">
+            <label class="control-label col-sm-2" for="s">Price</label>
+            <div class="col-sm-10">
+                <input type="text" id="s" name="s" required>
+            </div>
+        </div>
+        <div class="form-group row text-white">
+            <label class="control-label col-sm-2" for="t">BHK</label>
+            <div class="col-sm-10">
+                <select id="t" name="t">
+                    <option></option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value=">5">>5</option>
+                </select>
+            </div>
+            
+        </div>
+        <div class="form-group row">
+                <label class="control-label col-sm-2 text-white" for="u">Construction Status</label>
+                <div class="col-sm-10">
+                    <select id="u" name="u" required>
+                        <option></option>
+                        <option value="Under Construction">Under Construction</option>
+                        <option value="Ready To Move">Ready To Move</option>
+                    </select>
+                </div>
+        </div>
+
+        
+        <div class="form-group row">
+            <label class="control-label col-sm-2 text-white" for="v">Area</label>
+            <div class="col-sm-10">
+                <input type="text" id="v" name="v" placeholder="Area (sq. ft.)" required>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="control-label col-sm-2 text-white" for="w">Address</label>
+            <div class="col-sm-10">
+                <input type="text" id="w" name="w" placeholder="Address" required>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="control-label col-sm-2 text-white" for="x">Description</label>
+            <div class="col-sm-10">
+                <textarea id="x" name="x" placeholder="Description" required></textarea>
+            </div>
+        </div>
+         <button type="submit" class="btn btn-dark"> Post ! </button>
+    </form>
+
+                    
+
+</div>
+{% else %}
+<p>You need to be a registered seller to see the post owner's contact details. Login <a href="{% url 'ecommerce:login_user' %}">here</a></p>
+{% endifequal %}
+{% else %}
+<p>You need to be a registered seller to see the post owner's contact details. Login <a href="{% url 'ecommerce:login_user' %}">here</a></p>
+{% endif %}
+
+
+
+
