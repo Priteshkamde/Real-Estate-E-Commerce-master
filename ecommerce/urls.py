@@ -13,6 +13,3 @@ urlpatterns = [
     url(r'^logout_user/$', views.logout_user, name='logout_user'),
     url(r'^dashboard/$', views.dashboard, name='dashboard'),
 ]
-
-
-
