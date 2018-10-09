@@ -18,8 +18,8 @@
 <body>
 <div class="box">
     <h2>Login</h2>
-    <h3>
-        Not yet a user?<a href="{% url 'ecommerce:register_user' %}">Register</a>
+    <h3 style="color:white;">
+        <span>Not yet a user? </span><a href="{% url 'ecommerce:register_user' %}">Register</a>
     </h3>
     <form method="post" action="{% url 'ecommerce:login_user'%}">
         {% csrf_token %}
