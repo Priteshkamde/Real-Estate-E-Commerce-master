@@ -1,4 +1,5 @@
 {% if user.is_authenticated %}
+<!--suppress ALL -->
 <p>Signed in as {{ user.username }}
 <a class="btn btn-primary text-dark" href="{% url 'ecommerce:logout_user' %}">Logout</a>
 {% endif %}
@@ -14,14 +15,23 @@
 <h4>Description: {{ property.description }}</h4>
 
 {% if user.is_authenticated %}
-    {% ifequal user.type 'buyer' %}
-        <h4>Owner Name: {{ property.user.username }}</h4>
-        <h4>Owner Contact: {{ property.user.contact }}</h4>
+    {% ifequal property.buy_rent 'Sale' %}
+        {% ifequal user.type 'buyer' %}
+            <h4>Owner Name: {{ property.user.username }}</h4>
+            <h4>Owner Contact: {{ property.user.contact }}</h4>
+        {% else %}
+            <p>You need to be a registered buyer to see the post owner's contact details. Login <a href="{% url 'ecommerce:login_user' %}">here</a></p>
+        {% endifequal %}
     {% else %}
-        <p>You need to be a registered buyer to see the post owner's contact details. Login <a href="{% url 'ecommerce:login_user' %}">here</a></p>
+        {% ifequal property.buy_rent 'Rent' %}
+            {% ifequal user.type 'tenant' %}
+                <h4>Owner Name: {{ property.user.username }}</h4>
+                <h4>Owner Contact: {{ property.user.contact }}</h4>
+            {% else %}
+                <p>You need to be a registered tenant to see the post owner's contact details. Login <a href="{% url 'ecommerce:login_user' %}">here</a></p>
+            {% endifequal %}
+        {% endifequal %}
     {% endifequal %}
-{% else %}
-<p>You need to be a registered buyer to see the post owner's contact details. Login <a href="{% url 'ecommerce:login_user' %}">here</a></p>
 {% endif %}
 
 <div class="card-header">
