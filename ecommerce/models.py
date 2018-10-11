@@ -15,17 +15,18 @@ class CustomUser(AbstractUser):
 
 
 class Properties(models.Model):
+    image = models.ImageField(upload_to='media/', blank=True, default='media/media/download.jpg')
     property_title = models.CharField(max_length=10000)
     buy_rent = models.CharField(max_length=10000, choices=POST_CHOICES)
     locality = models.CharField(max_length=10000)
     property_type = models.CharField(max_length=10000, choices=PROPERTY_TYPE_CHOICES)
     price = models.IntegerField()
-    BHK = models.CharField(max_length=10000,
+    BHK = models.CharField(null=True, max_length=10000,
                            choices=BHK_CHOICES)
     construction_status = models.CharField(max_length=100, choices=CONSTRUCTION_STATUS_CHOICES)
     area = models.IntegerField()
     address = models.CharField(max_length=10000)
-    description = models.CharField(max_length=10000)
+    description = models.CharField(null=True, max_length=10000)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
 
     def __str__(self):

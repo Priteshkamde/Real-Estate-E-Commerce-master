@@ -1,4 +1,5 @@
 {% load static %}
+<!--suppress ALL -->
 <html>
 <head>
     <link rel="stylesheet" href="{% static 'css/stylesearch.css' %}">
@@ -33,6 +34,7 @@
     <h3>{{ property.property_title }}</h3>
   </button>
     <ul class="list-group list-group-flush">
+        <li class="list-group-item"><img src="{{ property.image.url }}" alt="{{ property.property_titlr }}"> </li>
         <li class="list-group-item"><h5>Locality: {{ property.locality }}</h5></li>
         <li class="list-group-item">for {{ property.buy_rent }}</li>
         <li class="list-group-item">for {{ property.property_type }}</li>

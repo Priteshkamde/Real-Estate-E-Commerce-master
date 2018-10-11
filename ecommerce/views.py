@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_list_or_404, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
-from .forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm, PropertyPostForm
 from .models import Properties, Comments
 import time
 
@@ -29,25 +29,25 @@ def property_detail(request, pk):
 
 
 def post_property(request):
-    if request.method == "POST" and request.user.is_authenticated and request.user.type == "seller":
-        property_obj = Properties()
+    form = PropertyPostForm(request.POST or None, request.FILES or None)
+    if form.is_valid() and request.user.is_authenticated and (
+            request.user.type == "seller" or request.user.type == "lessor"):
+        property_obj = form.save(commit=False)
         property_obj.user = request.user
-        property_obj.property_title = request.POST['m']
-        property_obj.buy_rent = request.POST['p']
-        property_obj.locality = request.POST['q']
-        property_obj.property_type = request.POST['r']
-        property_obj.price = int(request.POST['s'])
-        if request.POST['t'] is not None:
-            property_obj.BHK = request.POST['t']
-        else:
-            property_obj.BHK = '0'
-        property_obj.construction_status = request.POST['u']
-        property_obj.area = int(request.POST['v'])
-        property_obj.address = request.POST['w']
-        property_obj.description = request.POST['x']
+        property_obj.image = request.FILES['image']
+        property_obj.property_title = form.cleaned_data['property_title']
+        property_obj.buy_rent = form.cleaned_data['buy_rent']
+        property_obj.locality = form.cleaned_data['locality']
+        property_obj.property_type = form.cleaned_data['property_type']
+        property_obj.price = int(form.cleaned_data['price'])
+        property_obj.BHK = form.cleaned_data['BHK']
+        property_obj.construction_status = form.cleaned_data['construction_status']
+        property_obj.area = int(form.cleaned_data['area'])
+        property_obj.address = form.cleaned_data['address']
+        property_obj.description = form.cleaned_data['description']
         property_obj.save()
 
-    return render(request, 'ecommerce/post_property.html')
+    return render(request, 'ecommerce/post_property.html', {'form': form})
 
 
 def dashboard(request):
