@@ -1,18 +1,60 @@
-{% if user.is_authenticated %}
-<!--suppress ALL -->
-<p>Signed in as {{ user.username }}
+{% load static %}
+<html>
+<head>
+    <link rel="stylesheet" href="{% static 'css/stylesearch.css' %}">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+</head>
+
+<div class="card text-white bg-primary">
+    <div class="card-header">
+        {% if user.is_authenticated %}
+        <p class="lead">Signed in as <span class="badge badge-dark">{{ user.username }}</span>
+        </p>
+    </div>
+</div>
+
+
 <a class="btn btn-primary text-dark" href="{% url 'ecommerce:logout_user' %}">Logout</a>
 {% endif %}
-<h1>{{ property.property_title }}</h1>
-<h3>Locality: {{ property.locality }}</h3>
-<h4>for {{ property.buy_rent }}</h4>
-<h4>Type:{{ property.property_type }}</h4>
-<h4>Price: Rs. {{ property.price }}</h4>
-<h4>BHK: {{ property.BHK }}</h4>
-<h4>Construction Status: {{ property.construction_status }}</h4>
-<h4>Area: {{ property.area }} sq. ft.</h4>
-<h4>Address: {{ property.address }}</h4>
-<h4>Description: {{ property.description }}</h4>
+
+<div class="list-group">
+  <button type="button" class="btn btn-info">
+    <h3>{{ property.property_title }}</h3>
+  </button>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item"><h5>Locality: {{ property.locality }}</h5></li>
+        <li class="list-group-item">for {{ property.buy_rent }}</li>
+        <li class="list-group-item">for {{ property.property_type }}</li>
+        <li class="list-group-item">Price: Rs. {{ property.price }}</li>
+        <li class="list-group-item">BHK: {{ property.BHK }} </li>
+        <li class="list-group-item">Construction Status: {{ property.construction_status }}  </li>
+        <li class="list-group-item">Area: {{ property.area }} sq. ft.</li>
+        <li class="list-group-item">Address: {{ property.address }}</li>
+        <li class="list-group-item">Description: {{ property.description }}</li>
+        <li class="list-group-item">  </li>
+    </ul>
+</div>
+
+
+<!--<h4>for {{ property.buy_rent }}</h4>-->
+<!--<h4>Type:{{ property.property_type }}</h4>-->
+<!--<h4>Price: Rs. {{ property.price }}</h4>-->
+<!--<h4>BHK: {{ property.BHK }}</h4>-->
+<!--<h4>Construction Status: {{ property.construction_status }}</h4>-->
+<!--<h4>Area: {{ property.area }} sq. ft.</h4>-->
+<!--<h4>Address: {{ property.address }}</h4>-->
+<!--<h4>Description: {{ property.description }}</h4>-->
 
 {% if user.is_authenticated %}
     {% ifequal property.buy_rent 'Sale' %}
@@ -34,7 +76,35 @@
     {% endifequal %}
 {% endif %}
 
-<div class="card-header">
+    <!--Comments begin here -->
+<div class="card">
+  <div class="card-header text-white bg-warning">
+    Comments
+  </div>
+  <div class="card-body">
+      <ul class="list-group">
+        {% for comment in comments %}
+        {% ifequal comment.property_title property.property_title %}
+        <li class="list-group-item">
+            <h6>
+                {{ comment.user }}
+                <small>{{ comment.datetime }}</small>
+            </h6>
+            <p>{{ comment.comment }}</p>
+        </li>
+        {% endifequal %}
+        {% endfor %}
+      </ul>
+
+    <h5 class="card-title">Special title treatment</h5>
+    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+    <a href="#" class="btn btn-primary">Go somewhere</a>
+  </div>
+</div>
+
+<!--Some edits after this-->
+
+<div class="card-header text-white bg-dark" >
     <strong>Comments:</strong>
 </div>
 
@@ -52,6 +122,8 @@
         {% endifequal %}
         {% endfor %}
     </ul>
+
+<!--taken till here -->
     <form class="form-horizontal" role="form" action="#comments" method="post"
           enctype="multipart/form-data">
         {% csrf_token %}
@@ -76,7 +148,7 @@
         <br>
         <textarea class="form-control form-control-md" id="a" name="a"
                   placeholder="Your Comment" disabled>
-                            </textarea>
+        </textarea>
         <div class="form-row">
             <div class="form-group">
                 <div class="col-sm-offset-1 col-sm-10">
@@ -95,7 +167,7 @@
         <br>
         <textarea class="form-control form-control-md" id="a" name="a"
                   placeholder="Your Comment" disabled>
-                            </textarea>
+        </textarea>
         <div class="form-row">
             <div class="form-group">
                 <div class="col-sm-offset-1 col-sm-10">
