@@ -59,97 +59,17 @@
 <div id="centraldata">
     
 
-    <form method="post" action="#" id="post_property">
+    <form method="post" action="#" id="post_property" enctype="multipart/form-data">
         {% csrf_token %}
-        <div class="form-group row">
-            <label class="control-label col-sm-2 text-white" for="m">Property Title</label>
-            <div class="col-sm-10">
-                <input type="text" id="m" name="m" placeholder="Title" required>
+        {% for field in form %}
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <span class="text-danger small">{{ field.errors }}</span>
             </div>
+            <label class="control-label col-sm-2" >{{ field.label_tag }}</label>
+            <div class="col-sm-10">{{ field }}</div>
         </div>
-        <div class="form-group row">
-            <label class="control-label col-sm-2 text-white" for="p">Sell/Lease</label>
-            <div class="col-sm-10">
-                <select name="p" id="p" required>
-                    <option></option>
-                    <option value="Buy">Sell</option>
-                    <option value="Rent">Lease</option>
-                </select>
-            </div>
-        </div>
-        <div class="form-group row">
-
-            <label class="control-label col-sm-2 text-white" for="q">Locality</label>
-            <div class="col-sm-10">
-                <input type="text" id="q" name="q" placeholder="Locality" required>
-            </div>
-        </div>
-        <div class="form-group row">
-            <label class="control-label col-sm-2 text-white" for="r">Property Type</label>
-            <div class="col-sm-10">
-                <select id="r" name="r" required>
-                    <option></option>
-                    <option value="Flat">Flat</option>
-                    <option value="House/Villa">House/Villa</option>
-                    <option value="Plot">Plot</option>
-                    <option value="Office Space">Office Space</option>
-                    <option value="Other Commercial">Other Commercial</option>
-                    <option value="Shop/Showroom">Shop/Showroom</option>
-                </select>
-            </div>
-        </div>
-        <div class="form-group row text-white">
-            <label class="control-label col-sm-2" for="s">Price</label>
-            <div class="col-sm-10">
-                <input type="text" id="s" name="s" required>
-            </div>
-        </div>
-        <div class="form-group row text-white">
-            <label class="control-label col-sm-2" for="t">BHK</label>
-            <div class="col-sm-10">
-                <select id="t" name="t">
-                    <option></option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value=">5">>5</option>
-                </select>
-            </div>
-            
-        </div>
-        <div class="form-group row">
-                <label class="control-label col-sm-2 text-white" for="u">Construction Status</label>
-                <div class="col-sm-10">
-                    <select id="u" name="u" required>
-                        <option></option>
-                        <option value="Under Construction">Under Construction</option>
-                        <option value="Ready To Move">Ready To Move</option>
-                    </select>
-                </div>
-        </div>
-
-        
-        <div class="form-group row">
-            <label class="control-label col-sm-2 text-white" for="v">Area</label>
-            <div class="col-sm-10">
-                <input type="text" id="v" name="v" placeholder="Area (sq. ft.)" required>
-            </div>
-        </div>
-        <div class="form-group row">
-            <label class="control-label col-sm-2 text-white" for="w">Address</label>
-            <div class="col-sm-10">
-                <input type="text" id="w" name="w" placeholder="Address" required>
-            </div>
-        </div>
-
-        <div class="form-group row">
-            <label class="control-label col-sm-2 text-white" for="x">Description</label>
-            <div class="col-sm-10">
-                <textarea id="x" name="x" placeholder="Description" required></textarea>
-            </div>
-        </div>
+        {% endfor %}
          <button type="submit" class="btn btn-dark"> Post ! </button>
     </form>
 
