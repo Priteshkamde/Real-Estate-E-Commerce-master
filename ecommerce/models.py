@@ -15,7 +15,6 @@ class CustomUser(AbstractUser):
 
 
 class Properties(models.Model):
-    image = models.ImageField(upload_to='media/', blank=True, default='media/media/download.jpg')
     property_title = models.CharField(max_length=10000)
     buy_rent = models.CharField(max_length=10000, choices=POST_CHOICES)
     locality = models.CharField(max_length=10000)
@@ -31,6 +30,11 @@ class Properties(models.Model):
 
     def __str__(self):
         return self.property_title
+
+
+class ImageElement(models.Model):
+    post = models.ForeignKey(Properties, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='media/', null=True, blank=True, default='media/media/download.jpg')
 
 
 class Comments(models.Model):

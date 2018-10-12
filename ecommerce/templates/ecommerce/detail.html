@@ -64,20 +64,16 @@
 </nav>
 
 
-{% ifequal user.type 'seller' %}
 <div class="jumbotron">
   <div class="container">
     <h1 class="display-10">Properties are </h1>
         <ul>
             {% for property in properties %}
-            {% ifequal property.user user %}
                 <li><a href="{% url 'ecommerce:property_details' pk=property.id %}">{{ property }}</a></li>
-            {% endifequal %}
             {% endfor %}
         </ul>
   </div>
 </div>
-{% endifequal %}
 
 
 </body>

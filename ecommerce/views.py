@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_list_or_404, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from .forms import CustomUserCreationForm, PropertyPostForm
-from .models import Properties, Comments
+from .models import Properties, Comments, ImageElement
 import time
 
 
@@ -18,6 +18,7 @@ def detail(request):
 def property_detail(request, pk):
     property_obj = get_object_or_404(Properties, pk=pk)
     comments = Comments.objects.all()
+    images = ImageElement.objects.all()
     if request.method == 'POST':
         com = Comments()
         com.user = request.user
@@ -25,7 +26,7 @@ def property_detail(request, pk):
         com.datetime = str(time.asctime(time.localtime(time.time())))
         com.comment = request.POST['a']
         com.save()
-    return render(request, 'ecommerce/property_detail.html', {'property': property_obj, 'comments': comments})
+    return render(request, 'ecommerce/property_detail.html', {'property': property_obj, 'comments': comments, 'images': images})
 
 
 def post_property(request):
@@ -33,8 +34,9 @@ def post_property(request):
     if form.is_valid() and request.user.is_authenticated and (
             request.user.type == "seller" or request.user.type == "lessor"):
         property_obj = form.save(commit=False)
+        image_obj = ImageElement()
         property_obj.user = request.user
-        property_obj.image = request.FILES['image']
+        image_obj.image = request.FILES['image']
         property_obj.property_title = form.cleaned_data['property_title']
         property_obj.buy_rent = form.cleaned_data['buy_rent']
         property_obj.locality = form.cleaned_data['locality']
@@ -46,6 +48,8 @@ def post_property(request):
         property_obj.address = form.cleaned_data['address']
         property_obj.description = form.cleaned_data['description']
         property_obj.save()
+        image_obj.post = property_obj
+        image_obj.save()
 
     return render(request, 'ecommerce/post_property.html', {'form': form})
 
