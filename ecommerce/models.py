@@ -27,6 +27,7 @@ class Properties(models.Model):
     address = models.CharField(max_length=10000)
     description = models.CharField(null=True, max_length=10000)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    post_date_time = models.DateTimeField(null=True)
 
     def __str__(self):
         return self.property_title

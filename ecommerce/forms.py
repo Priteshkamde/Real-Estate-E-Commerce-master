@@ -31,7 +31,6 @@ class CustomUserChangeForm(UserChangeForm):
 
 class PropertyPostForm(forms.ModelForm):
     property_title = forms.CharField(label='Post Title', required=True)
-    buy_rent = forms.ChoiceField(choices=POST_CHOICES, label='Property For', widget=forms.Select(), required=True)
     locality = forms.CharField(label='Locality', required=True)
     property_type = forms.ChoiceField(choices=PROPERTY_TYPE_CHOICES, widget=forms.Select(), label='Property Type',
                                       required=True)
@@ -42,11 +41,10 @@ class PropertyPostForm(forms.ModelForm):
     area = forms.CharField(label="Area", required=True)
     address = forms.CharField(widget=forms.Textarea(), label='Address', required=True)
     description = forms.CharField(widget=forms.Textarea(), label='Description', required=False)
-    image = forms.ImageField(label='Picture', required=False)
 
     class Meta:
         model = Properties
         fields = (
-            'property_title', 'buy_rent', 'locality', 'property_type', 'price', 'BHK', 'construction_status', 'area',
-            'address', 'description', 'image'
+            'property_title', 'locality', 'property_type', 'price', 'BHK', 'construction_status', 'area',
+            'address', 'description'
         )
