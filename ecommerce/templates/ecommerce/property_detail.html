@@ -1,10 +1,20 @@
 {% extends 'ecommerce/base.html' %}
+{% block head %}
+<script>
+function myFunction() {
+    alert("Owner: {{ property.user.first_name }} {{ property.user.last_name }}\nContact: {{ property.user.contact }}");
+}
+
+</script>
+
+{% endblock %}
 {% block title %}Home{% endblock %}
 
 {% block body %}
 {% load static %}
 
 
+<!--suppress ALL -->
 <div class="list-group">
     <button type="button" class="btn btn-info">
         <h3>{{ property.property_title }}</h3>
@@ -28,31 +38,16 @@
             {% if user.is_authenticated %}
             {% ifequal property.buy_rent 'Sale' %}
             {% ifequal user.type 'buyer' %}
-            <!-- Button trigger modal -->
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                Get Contact
-            </button>
 
-            <!-- Modal -->
-            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-                 aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Save changes</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <!--Get Contact -->
+            <form id="getContactForm" class="form-horizontal" role="form" action="#comments" method="post"
+                  enctype="multipart/form-data">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary" onclick="myFunction()">Get Contact</button>
+                <p class="text-danger">By clicking this button you can view the owner's details and your details will be
+                    shown to the owner as well.</p>
+            </form>
+
             {% else %}
             {% ifequal user.username property.user.username %}
             <p>You own this post</p>
@@ -64,32 +59,16 @@
             {% else %}
             {% ifequal property.buy_rent 'Rent' %}
             {% ifequal user.type 'tenant' %}
-            <!-- Button trigger modal -->
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                Get Contact
-            </button>
 
-            <!-- Modal -->
-            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-                 aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            ...
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Save changes</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <!--Get Contact -->
+            <form id="getContactForm" class="form-horizontal" role="form" action="#comments" method="post"
+                  enctype="multipart/form-data">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary" onclick="myFunction()">Get Contact</button>
+                <p class="text-danger">By clicking this button you can view the owner's details and your details will be
+                    shown to the owner as well.</p>
+            </form>
+
             {% else %}
             {% ifequal user.username property.user.username %}
             <p>You own this post</p>
@@ -104,45 +83,6 @@
         </li>
     </ul>
 </div>
-
-
-<!--<h4>for {{ property.buy_rent }}</h4>-->
-<!--<h4>Type:{{ property.property_type }}</h4>-->
-<!--<h4>Price: Rs. {{ property.price }}</h4>-->
-<!--<h4>BHK: {{ property.BHK }}</h4>-->
-<!--<h4>Construction Status: {{ property.construction_status }}</h4>-->
-<!--<h4>Area: {{ property.area }} sq. ft.</h4>-->
-<!--<h4>Address: {{ property.address }}</h4>-->
-<!--<h4>Description: {{ property.description }}</h4>-->
-
-
-<!--Comments begin here -->
-<!--<div class="card">-->
-<!--<div class="card-header text-white bg-warning">-->
-<!--Comments-->
-<!--</div>-->
-<!--<div class="card-body">-->
-<!--<ul class="list-group">-->
-<!--{% for comment in comments %}-->
-<!--{% ifequal comment.property_title property.property_title %}-->
-<!--<li class="list-group-item">-->
-<!--<h6>-->
-<!--{{ comment.user }}-->
-<!--<small>{{ comment.datetime }}</small>-->
-<!--</h6>-->
-<!--<p>{{ comment.comment }}</p>-->
-<!--</li>-->
-<!--{% endifequal %}-->
-<!--{% endfor %}-->
-<!--</ul>-->
-
-<!--<h5 class="card-title">Special title treatment</h5>-->
-<!--<p class="card-text">With supporting text below as a natural lead-in to additional content.</p>-->
-<!--<a href="#" class="btn btn-primary">Go somewhere</a>-->
-<!--</div>-->
-<!--</div>-->
-
-<!--Some edits after this-->
 
 <div class="card-header text-white bg-dark" id="comments">
     <strong>Comments:</strong>
@@ -232,5 +172,6 @@
         {% endif %}
     </form>
 </div>
+
 
 {% endblock %}

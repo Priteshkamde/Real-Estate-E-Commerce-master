@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_list_or_404, get_object_or_404
+from django.core.mail import send_mail
 from django.contrib.auth import authenticate, login, logout
 from .forms import CustomUserCreationForm, PropertyPostForm
 from .models import Properties, Comments, ImageElement
@@ -12,11 +13,23 @@ def index(request):
 def detail(request):
     search = request.GET['q']
     properties = get_list_or_404(Properties, locality=search)
+
     if request.method == 'POST':
         value = request.POST['sort']
         if value == 'relevance':
-            pass
-            # properties.sort(properties.)
+            properties = sorted(properties, key=lambda property: property.property_title)
+        elif value == 'price_low_to_high':
+            properties = sorted(properties, key=lambda property: property.price)
+        elif value == 'price_high_low':
+            properties = reversed(sorted(properties, key=lambda property: property.price))
+        elif value == 'sqft_low_high':
+            properties = sorted(properties, key=lambda property: property.area)
+        elif value == 'sqft_high_low':
+            properties = reversed(sorted(properties, key=lambda property: property.area))
+        elif value == 'latest':
+            properties = sorted(properties, key=lambda property: property.post_date_time)
+
+        return render(request, 'ecommerce/detail.html', {'properties': properties})
 
     return render(request, 'ecommerce/detail.html', {'properties': properties})
 
@@ -26,12 +39,19 @@ def property_detail(request, pk):
     comments = Comments.objects.all()
     images = ImageElement.objects.all()
     if request.method == 'POST':
-        com = Comments()
-        com.user = request.user
-        com.property_title = property_obj.property_title
-        com.datetime = str(time.asctime(time.localtime(time.time())))
-        com.comment = request.POST['a']
-        com.save()
+        if request.POST.get('a', False):
+            com = Comments()
+            com.user = request.user
+            com.property_title = property_obj.property_title
+            com.datetime = str(time.asctime(time.localtime(time.time())))
+            com.comment = request.POST['a']
+            com.save()
+        else:
+            message = str(request.user.first_name) + str(
+                request.user.last_name) + 'visited your profile.\nTheir contact: ' + str(property_obj.user.contact)
+            send_mail('Your post on REES has a visitor', message, 'rohan.jagtap@spit.ac.in', [property_obj.user.email],
+                      fail_silently=False)
+
     return render(request, 'ecommerce/property_detail.html',
                   {'property': property_obj, 'comments': comments, 'images': images})
 
@@ -42,7 +62,6 @@ def post_property(request):
     if form.is_valid() and request.user.is_authenticated and (
             request.user.type == "seller" or request.user.type == "lessor"):
         property_obj = form.save(commit=False)
-        property_obj.post_date_time = time.asctime(time.localtime(time.time()))
         property_obj.user = request.user
         property_obj.property_title = form.cleaned_data['property_title']
         if request.user.type == "seller":

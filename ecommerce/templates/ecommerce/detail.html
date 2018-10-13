@@ -64,9 +64,8 @@
 </nav>
 
 
-
-
 <form method="post" action="#" id="post_property" enctype="multipart/form-data">
+    {% csrf_token %}
     <select id="sort" name="sort">
         <option value="relevance">Relevance</option>
         <option value="price_low_high">Price - Low to High</option>
