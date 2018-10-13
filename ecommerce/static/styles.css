@@ -1,3 +1,8 @@
+body{
+	background-image: url("https://images.pexels.com/photos/218983/pexels-photo-218983.jpeg");
+	background-size: cover;
+}
+
 .vertical-align{
     min-height:100%;
     min-height:100vh;
