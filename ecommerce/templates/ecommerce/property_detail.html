@@ -5,6 +5,9 @@ function myFunction() {
     alert("Owner: {{ property.user.first_name }} {{ property.user.last_name }}\nContact: {{ property.user.contact }}");
 }
 
+
+
+
 </script>
 
 {% endblock %}
@@ -15,74 +18,125 @@ function myFunction() {
 
 
 <!--suppress ALL -->
-<div class="list-group">
-    <button type="button" class="btn btn-info">
-        <h3>{{ property.property_title }}</h3>
-    </button>
-    <ul class="list-group list-group-flush">
-        {% for image in images %}
-        {% ifequal image.post property %}
-        <li class="list-group-item"><img src="{{ image.image.url }}" alt="{{ property.property_title }}"></li>
-        {% endifequal %}
-        {% endfor %}
-        <li class="list-group-item"><h5>Locality: {{ property.locality }}</h5></li>
-        <li class="list-group-item">for {{ property.buy_rent }}</li>
-        <li class="list-group-item">for {{ property.property_type }}</li>
-        <li class="list-group-item">Price: Rs. {{ property.price }}</li>
-        <li class="list-group-item">BHK: {{ property.BHK }}</li>
-        <li class="list-group-item">Construction Status: {{ property.construction_status }}</li>
-        <li class="list-group-item">Area: {{ property.area }} sq. ft.</li>
-        <li class="list-group-item">Address: {{ property.address }}</li>
-        <li class="list-group-item">Description: {{ property.description }}</li>
-        <li class="list-group-item">
-            {% if user.is_authenticated %}
-            {% ifequal property.buy_rent 'Sale' %}
-            {% ifequal user.type 'buyer' %}
+<div class="container">
 
-            <!--Get Contact -->
-            <form id="getContactForm" class="form-horizontal" role="form" action="#comments" method="post"
-                  enctype="multipart/form-data">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-primary" onclick="myFunction()">Get Contact</button>
-                <p class="text-danger">By clicking this button you can view the owner's details and your details will be
-                    shown to the owner as well.</p>
-            </form>
+    <div class="row">
+        <div class="col-lg-12">
 
-            {% else %}
-            {% ifequal user.username property.user.username %}
-            <p>You own this post</p>
-            {% else %}
-            <p>You need to be a registered buyer to see the post owner's contact details. Login <a
-                    href="{% url 'ecommerce:login_user' %}">here</a></p>
-            {% endifequal %}
-            {% endifequal %}
-            {% else %}
-            {% ifequal property.buy_rent 'Rent' %}
-            {% ifequal user.type 'tenant' %}
+            <div class="card mt-4">
 
-            <!--Get Contact -->
-            <form id="getContactForm" class="form-horizontal" role="form" action="#comments" method="post"
-                  enctype="multipart/form-data">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-primary" onclick="myFunction()">Get Contact</button>
-                <p class="text-danger">By clicking this button you can view the owner's details and your details will be
-                    shown to the owner as well.</p>
-            </form>
+                <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner">
+                        {% for image in images %}
+                        <div class="carousel-item {% if forloop.counter0 == 0 %}active{% endif %}">
+                            <img class="d-block w-100" src="{{ image.image.url }}">
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
 
-            {% else %}
-            {% ifequal user.username property.user.username %}
-            <p>You own this post</p>
-            {% else %}
-            <p>You need to be a registered tenant to see the post owner's contact details. Login <a
-                    href="{% url 'ecommerce:login_user' %}">here</a></p>
-            {% endifequal %}
-            {% endifequal %}
-            {% endifequal %}
-            {% endifequal %}
-            {% endif %}
-        </li>
-    </ul>
+
+
+                <div class="card-body">
+                    <h3 class="card-title">{{ property.property_title }}</h3>
+                    <h4><span>&#x20b9;</span>{{ property.price }}</h4>
+                    {% if property.description.strip %}
+                    <p class="card-text">{{ property.description }}</p>
+                    {% else %}
+                    <p class="card-text">No Description</p>
+                    {% endif %}
+                </div>
+            </div>
+            <!-- /.card -->
+
+            <div class="card card-outline-secondary my-4">
+                <div class="card-header">
+                    <span>Details</span>
+                </div>
+                <div class="card-body">
+                    <p>Locality: {{ property.locality }}</p>
+                    <hr>
+                    <p>Type: {{ property.property_type }}</p>
+                    <hr>
+                    {% ifequal property.BHK "" %}
+                    <p>BHK: N/A</p>
+                    {% else %}
+                    <p>BHK: {{ property.BHK }}</p>
+                    {% endifequal %}
+                    <hr>
+                    <p>Construction Status: {{ property.construction_status }}</p>
+                    <hr>
+                    <p>Area (sq. ft.): {{ property.area }}</p>
+                    <hr>
+                    <p>Address: {{ property.address }}</p>
+                    <hr>
+                    {% if user.is_authenticated %}
+                    {% ifequal property.buy_rent 'Sale' %}
+                    {% ifequal user.type 'buyer' %}
+
+                    <!--Get Contact -->
+                    <form id="getContactForm" class="form-horizontal" role="form" action="#comments" method="post"
+                          enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-success" onclick="myFunction()">Get Contact</button>
+                        <br><br>
+                        <p class="text-danger">By clicking this button you can view the owner's details and your details
+                            will be
+                            shown to the owner as well.</p>
+                    </form>
+
+                    {% else %}
+                    {% ifequal user.username property.user.username %}
+                    <p>You own this post</p>
+                    {% else %}
+                    <p>You need to be a registered buyer to see the post owner's contact details. Login <a
+                            href="{% url 'ecommerce:login_user' %}">here</a></p>
+                    {% endifequal %}
+                    {% endifequal %}
+                    {% else %}
+                    {% ifequal property.buy_rent 'Rent' %}
+                    {% ifequal user.type 'tenant' %}
+
+                    <!--Get Contact -->
+                    <form id="getContactForm" class="form-horizontal" role="form" action="#comments" method="post"
+                          enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-success" onclick="myFunction()">Get Contact</button>
+                        <br><br>
+                        <p class="text-danger">By clicking this button you can view the owner's details and your details
+                            will be
+                            shown to the owner as well.</p>
+                    </form>
+                    {% else %}
+                    {% ifequal user.username property.user.username %}
+                    <p>You own this post</p>
+                    {% else %}
+                    <p>You need to be a registered tenant to see the post owner's contact details. Login <a
+                            href="{% url 'ecommerce:login_user' %}">here</a></p>
+                    {% endifequal %}
+                    {% endifequal %}
+                    {% endifequal %}
+                    {% endifequal %}
+                    {% endif %}
+                </div>
+            </div>
+            <!-- /.card -->
+
+        </div>
+        <!-- /.col-lg-9 -->
+
+    </div>
 </div>
+<!-- /.container -->
+
 
 <div class="card-header text-white bg-dark" id="comments">
     <strong>Comments:</strong>
@@ -91,7 +145,6 @@ function myFunction() {
 <div class="card-body ">
     <ul class="list-group">
         {% for comment in comments %}
-        {% ifequal comment.property_title property.property_title %}
         <li class="list-group-item">
             <h6>
                 {{ comment.user }}
@@ -99,7 +152,6 @@ function myFunction() {
             </h6>
             <p>{{ comment.comment }}</p>
         </li>
-        {% endifequal %}
         {% endfor %}
     </ul>
 

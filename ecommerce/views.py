@@ -36,8 +36,9 @@ def detail(request):
 
 def property_detail(request, pk):
     property_obj = get_object_or_404(Properties, pk=pk)
-    comments = Comments.objects.all()
-    images = ImageElement.objects.all()
+    comments = Comments.objects.filter(property_title=property_obj.property_title)
+    images = ImageElement.objects.filter(post=property_obj)
+
     if request.method == 'POST':
         if request.POST.get('a', False):
             com = Comments()
