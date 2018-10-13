@@ -1,0 +1,87 @@
+{% load static %}
+<html>
+<head>
+
+    <title>{% block title %}REES{% endblock %}</title>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/stylepostproperty.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/stylesearch.css' %}">
+</head>
+<body>
+
+
+
+<!--name of user card-->
+{% if user.is_authenticated %}
+<div class="card text-left text-white bg-primary" align="left">
+        <p class="lead">Signed in as <span class="badge badge-dark">{{ user.username }}</span>
+        </p>
+</div>
+{% endif %}
+<!--till here name card-->
+
+<!--toggle navbar-->
+
+<nav class="navbar navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">REES</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'ecommerce:index' %}">Home</a>
+            </li>
+
+
+        {% if user.is_authenticated %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'ecommerce:dashboard' %}">Dashboard</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'ecommerce:logout_user' %}">Logout</a>
+            </li>
+            {% ifequal user.type 'seller' %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'ecommerce:post_property' %}">Post</a>
+                </li>
+            {% endifequal %}
+
+         {% else %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'ecommerce:dashboard' %}" aria-disabled="true">Dashboard</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'ecommerce:login_user' %}">Login</a>
+            </li>
+
+         {% endif %}
+        </ul>
+    </div>
+</nav>
+
+<!-- toggle navbar ends-->
+
+{% block body %}
+{% endblock %}
+
+</body>
+</html>

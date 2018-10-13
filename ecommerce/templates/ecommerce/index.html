@@ -1,39 +1,8 @@
+{% extends 'ecommerce/base.html' %}
+{% block title %}Home{% endblock %}
+
+{% block body %}
 {% load static %}
-<html>
-<head>
-    <link rel="stylesheet" href="{% static 'css/stylesearch.css' %}">
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-            crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-            crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-            crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}">
-
-</head>
-
-<body>
-
-
-<nav class="navbar navbar-dark bg-dark fixed-top">
-    <div class="container">
-        <a class="navbar-brand" href="{% url 'ecommerce:index' %}"><strong>REES</strong></a>
-        {% if user.is_authenticated %}
-        <a class="btn btn-primary text-dark" href="{% url 'ecommerce:logout_user' %}">
-            <span aria-hidden="true"><img src="{%  static 'icon.png' %}"></span> Logout
-        </a>
-        {% else %}
-        <a class="btn btn-primary text-dark" href="{% url 'ecommerce:login_user' %}">
-            <span aria-hidden="true"><img src="{%  static 'sign-in.png' %}"></span>  Sign In
-        </a>
-        {% endif %}
-    </div>
-</nav>
 
 
 <header class="masthead text-white text-center vertical-align">
@@ -41,7 +10,7 @@
     <div class="container">
         <div class="row">
             <div class="col-xl-9 mx-auto">
-                <h1 class="mb-5">Find your dream property with a snap of your fingers.</h1>
+                <h1 class="mb-5 bg-transparent text-dark">Find your dream property <br> with a snap of your fingers.</h1>
             </div>
             <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
                 <form role="search" method="get" action="{% url 'ecommerce:detail' %}">
@@ -61,6 +30,4 @@
     </div>
 </header>
 
-</body>
-
-</html>
+{% endblock %}
