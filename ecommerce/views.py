@@ -12,6 +12,12 @@ def index(request):
 def detail(request):
     search = request.GET['q']
     properties = get_list_or_404(Properties, locality=search)
+    if request.method == 'POST':
+        value = request.POST['sort']
+        if value == 'relevance':
+            pass
+            # properties.sort(properties.)
+
     return render(request, 'ecommerce/detail.html', {'properties': properties})
 
 
@@ -26,19 +32,23 @@ def property_detail(request, pk):
         com.datetime = str(time.asctime(time.localtime(time.time())))
         com.comment = request.POST['a']
         com.save()
-    return render(request, 'ecommerce/property_detail.html', {'property': property_obj, 'comments': comments, 'images': images})
+    return render(request, 'ecommerce/property_detail.html',
+                  {'property': property_obj, 'comments': comments, 'images': images})
 
 
 def post_property(request):
+    i = 1
     form = PropertyPostForm(request.POST or None, request.FILES or None)
     if form.is_valid() and request.user.is_authenticated and (
             request.user.type == "seller" or request.user.type == "lessor"):
         property_obj = form.save(commit=False)
-        image_obj = ImageElement()
+        property_obj.post_date_time = time.asctime(time.localtime(time.time()))
         property_obj.user = request.user
-        image_obj.image = request.FILES['image']
         property_obj.property_title = form.cleaned_data['property_title']
-        property_obj.buy_rent = form.cleaned_data['buy_rent']
+        if request.user.type == "seller":
+            property_obj.buy_rent = 'Sale'
+        else:
+            property_obj.buy_rent = 'Rent'
         property_obj.locality = form.cleaned_data['locality']
         property_obj.property_type = form.cleaned_data['property_type']
         property_obj.price = int(form.cleaned_data['price'])
@@ -48,8 +58,14 @@ def post_property(request):
         property_obj.address = form.cleaned_data['address']
         property_obj.description = form.cleaned_data['description']
         property_obj.save()
-        image_obj.post = property_obj
-        image_obj.save()
+        image = request.FILES.get('image' + str(i), False)
+        while image:
+            image_obj = ImageElement()
+            image_obj.image = request.FILES['image' + str(i)]
+            image_obj.post = property_obj
+            image_obj.save()
+            i = i + 1
+            image = request.FILES.get('image' + str(i), False)
 
     return render(request, 'ecommerce/post_property.html', {'form': form})
 
