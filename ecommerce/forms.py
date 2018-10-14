@@ -29,6 +29,7 @@ class CustomUserChangeForm(UserChangeForm):
         fields = ('username', 'first_name', 'last_name', 'email', 'contact', 'type')
 
 
+
 class PropertyPostForm(forms.ModelForm):
     property_title = forms.CharField(label='Post Title', required=True)
     locality = forms.CharField(label='Locality', required=True)

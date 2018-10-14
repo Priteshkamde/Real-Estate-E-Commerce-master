@@ -63,10 +63,11 @@
     </div>
 </nav>
 
+<hr>
 
 <form method="post" action="#" id="post_property" enctype="multipart/form-data">
-    {% csrf_token %}
-    <select id="sort" name="sort">
+    <div class="form-group col-md-3">
+    <select class="form-control" id="exampleFormControlSelect1" id="sort" name="sort">
         <option value="relevance">Relevance</option>
         <option value="price_low_high">Price - Low to High</option>
         <option value="price_high_low">Price - High to Low</option>
@@ -74,29 +75,22 @@
         <option value="sqft_high_low">Area - High to Low</option>
         <option value="latest">Most Recent</option>
     </select>
+    </div>
     <div class="col-12 col-md-3">
         <button type="submit" class="btn btn-block btn-lg btn-primary">Sort</button>
     </div>
 </form>
 
 
-<div class="container">
-
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="card mt-4">
-                <ul class="list-group">
-                    {% for image in images %}
-                    <li class="list-group-item inline">
-                        <img src="{{ image.image.url }}">
-                        <a href="{% url 'ecommerce:property_details' pk=image.post.id %}">{{ image.post }}</a>
-                        <span>{{ image.post.description }}</span>
-                    </li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
-    </div>
+<div class="jumbotron">
+  <div class="container">
+    <h1 class="display-10">Properties are </h1>
+        <ul>
+            {% for property in properties %}
+                <li><a href="{% url 'ecommerce:property_details' pk=property.id %}">{{ property }}</a></li>
+            {% endfor %}
+        </ul>
+  </div>
 </div>
 
 

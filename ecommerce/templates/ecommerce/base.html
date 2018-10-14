@@ -22,12 +22,13 @@
 <body>
 
 
-
 <!--name of user card-->
 {% if user.is_authenticated %}
-<div class="card text-left text-white bg-primary" align="left">
+<div class="card text-white bg-primary">
+    <div class="card-header">
         <p class="lead">Signed in as <span class="badge badge-dark">{{ user.username }}</span>
         </p>
+    </div>
 </div>
 {% endif %}
 <!--till here name card-->
@@ -62,8 +63,10 @@
                     <a class="nav-link" href="{% url 'ecommerce:post_property' %}">Post</a>
                 </li>
             {% endifequal %}
+        </ul>
 
          {% else %}
+        <ul>
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'ecommerce:dashboard' %}" aria-disabled="true">Dashboard</a>
             </li>
@@ -71,13 +74,14 @@
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'ecommerce:login_user' %}">Login</a>
             </li>
-
-         {% endif %}
         </ul>
+         {% endif %}
+
     </div>
 </nav>
 
 <!-- toggle navbar ends-->
+
 
 {% block body %}
 {% endblock %}

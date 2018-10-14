@@ -1,14 +1,32 @@
 {% load static %}
+<html>
 <head>
+    <!--<script type="text/javascript" src="{% static 'css/multiButtonImage.js' %}"></script>-->
+    <script type="text/javascript" src="jquery-3.2.1.min.js"></script>
     <link rel="stylesheet" href="{% static 'css/stylepostproperty.css' %}">
      <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script>
+        $(document).on("click",".btn-add-row", function() {
+
+            var row = $(".row").eq(0).clone().show();
+
+            $(".element-wrapper").append(row);
+    });
+
+    $(document).on("click",".btn-remove-row", function() {
+
+            var index = $(".btn-remove-row").index(this);
+
+            $(".row").eq(index).remove();
+    });
+    </script>
 
 </head>
 
-
+<body>
 <div class="card text-white bg-primary">
   <div class="card-header">
     {% if user.is_authenticated %}
@@ -16,8 +34,6 @@
     </p>
  </div>
 </div>
-    
-
 
 
 <nav class="navbar navbar-dark bg-dark">
@@ -56,8 +72,8 @@
 <br>
 <br>
 
+
 <div id="centraldata">
-    
 
     <form method="post" action="#" id="post_property" enctype="multipart/form-data">
         {% csrf_token %}
@@ -66,7 +82,7 @@
             <div class="col-sm-offset-2 col-sm-10">
                 <span class="text-danger small">{{ field.errors }}</span>
             </div>
-            <label class="control-label col-sm-2" >{{ field.label_tag }}</label>
+            <label class="control-label col-sm-2 text-white" >{{ field.label_tag }}</label>
             <div class="col-sm-10">{{ field }}</div>
         </div>
         {% endfor %}
@@ -74,7 +90,7 @@
             <div class="col-sm-offset-2 col-sm-10">
                 <span class="text-danger small">{{ field.errors }}</span>
             </div>
-            <label class="control-label col-sm-2" for="image1">Picture</label>
+            <label class="control-label col-sm-2 text-white" for="image1">Picture</label>
             <div class="col-sm-10">
                 <input type="file" accept="image/jpeg, image/png" id="image1" name="image1">
             </div>
@@ -83,17 +99,38 @@
             <div class="col-sm-offset-2 col-sm-10">
                 <span class="text-danger small">{{ field.errors }}</span>
             </div>
-            <label class="control-label col-sm-2" for="image1">Picture</label>
+            <label class="control-label col-sm-2 text-white" for="image1">Picture</label>
             <div class="col-sm-10">
                 <input type="file" accept="image/jpeg, image/png" id="image2" name="image2">
             </div>
         </div>
-         <button type="submit" class="btn btn-dark"> Post</button>
+
+    <!--multiple buttons-->
+    <div class="element-wrapper">
+        <div class="row" style="display: none;">
+            <input type="text" placeholder="Image URL"/>
+            <button class="btn-remove-row btn btn-dark">
+                Remove Image
+            </button>
+
+        </div>
+    </div>
+
+    <button class="btn-add-row btn btn-dark">
+        Add Image
+    </button>
+    <!--multi buttons ends here-->
+
+    <hr>
+    <button type="submit" class="btn btn-dark"> Post</button>
+
     </form>
 
-
-
 </div>
+
+
+
+
 {% else %}
 <p>You need to be a registered seller to see the post owner's contact details. Login <a href="{% url 'ecommerce:login_user' %}">here</a></p>
 {% endifequal %}
@@ -101,6 +138,5 @@
 <p>You need to be a registered seller to see the post owner's contact details. Login <a href="{% url 'ecommerce:login_user' %}">here</a></p>
 {% endif %}
 
-
-
-
+</body>
+</html>

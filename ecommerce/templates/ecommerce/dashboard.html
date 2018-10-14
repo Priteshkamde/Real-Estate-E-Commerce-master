@@ -60,12 +60,24 @@
 </nav>
     {% endifequal %}
 
-<div class="card border-dark mb-3">
-  <div class="card-body text-dark">
-    <p class="card-text">{{ user.first_name }} {{ user.last_name }}</p>
-  </div>
-</div>
+<!--buyer name display done-->
+{% ifequal user.type 'buyer' %}
+        <div class="card border-dark mb-3">
+          <div class="card-body text-dark">
+            <p class="card-text">{{ user.first_name }} {{ user.last_name }}</p>
+          </div>
+        </div>
+{% endifequal %}
+
 <!--seller name display done-->
+{% ifequal user.type 'seller' %}
+    <div class="card border-dark mb-3">
+        <div class="card-body text-dark">
+            <p class="card-text">{{ user.first_name }} {{ user.last_name }}</p>
+        </div>
+    </div>
+{% endifequal %}
+
 
 {% ifequal user.type 'seller' %}
 <div class="jumbotron">
@@ -83,6 +95,7 @@
 {% endifequal %}
 
 {% else %}
+
     <a class="btn btn-primary text-dark" href="{% url 'ecommerce:login_user' %}">Login</a>
 {% endif %}
 
