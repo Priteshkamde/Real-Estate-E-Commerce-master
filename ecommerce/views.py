@@ -13,25 +13,28 @@ def index(request):
 def detail(request):
     search = request.GET['q']
     properties = get_list_or_404(Properties, locality=search)
+    images = []
+    for property in properties:
+        images.append(ImageElement.objects.filter(post=property).first())
 
     if request.method == 'POST':
         value = request.POST['sort']
         if value == 'relevance':
-            properties = sorted(properties, key=lambda property: property.property_title)
+            images = sorted(images, key=lambda image: image.post.property_title)
         elif value == 'price_low_to_high':
-            properties = sorted(properties, key=lambda property: property.price)
+            images = sorted(images, key=lambda image: image.post.price)
         elif value == 'price_high_low':
-            properties = reversed(sorted(properties, key=lambda property: property.price))
+            images = reversed(sorted(images, key=lambda image: image.post.price))
         elif value == 'sqft_low_high':
-            properties = sorted(properties, key=lambda property: property.area)
+            images = sorted(images, key=lambda image: image.post.area)
         elif value == 'sqft_high_low':
-            properties = reversed(sorted(properties, key=lambda property: property.area))
+            images = reversed(sorted(images, key=lambda image: image.post.area))
         elif value == 'latest':
-            properties = sorted(properties, key=lambda property: property.post_date_time)
+            images = sorted(images, key=lambda image: image.post.post_date_time)
 
-        return render(request, 'ecommerce/detail.html', {'properties': properties})
+        return render(request, 'ecommerce/detail.html', {'properties': properties, 'images': images})
 
-    return render(request, 'ecommerce/detail.html', {'properties': properties})
+    return render(request, 'ecommerce/detail.html', {'properties': properties, 'images': images})
 
 
 def property_detail(request, pk):

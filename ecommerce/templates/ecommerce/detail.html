@@ -86,9 +86,11 @@
         <div class="col-lg-12">
             <div class="card mt-4">
                 <ul class="list-group">
-                    {% for property in properties %}
-                    <li class="list-group-item">
-                        <a href="{% url 'ecommerce:property_details' pk=property.id %}">{{ property }}</a>
+                    {% for image in images %}
+                    <li class="list-group-item inline">
+                        <img src="{{ image.image.url }}">
+                        <a href="{% url 'ecommerce:property_details' pk=image.post.id %}">{{ image.post }}</a>
+                        <span>{{ image.post.description }}</span>
                     </li>
                     {% endfor %}
                 </ul>
