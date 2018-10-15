@@ -1,10 +1,11 @@
 
+#centraldata{
+ 	padding-left: 500px;
+}
+
 body
 {
 	background-image: url("https://images.pexels.com/photos/327482/pexels-photo-327482.jpeg");
 	background-size: cover;
 }
 
-#centraldata{
- 	padding-left: 650px;
-}

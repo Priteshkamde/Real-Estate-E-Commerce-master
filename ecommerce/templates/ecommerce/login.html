@@ -16,17 +16,13 @@
 
 </head>
 <body>
-
 <div class="box">
-    <!--black outer box-->
     <h2>Login</h2>
     <h3 style="color:white;">
         <span>Not yet a user? </span><a href="{% url 'ecommerce:register_user' %}">Register</a>
     </h3>
     <form method="post" action="{% url 'ecommerce:login_user'%}">
         {% csrf_token %}
-
-        <!--input fields -->
         <div class="inputbox">
             <input type="text" id="username" name="username" placeholder="" required="">
             <label for="username">Username</label>
@@ -42,7 +38,6 @@
         </center>
     </form>
 </div>
-<!--black outer box ENDS-->
 </body>
 </html>
 

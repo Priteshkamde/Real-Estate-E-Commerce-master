@@ -1,7 +1,7 @@
 {% load static %}
 <html>
 <head>
-    <link rel="stylesheet" href="{% static 'css/styleregister.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
             integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
             crossorigin="anonymous"></script>
@@ -15,37 +15,30 @@
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
 </head>
-
 <body>
-
-<div class="box">   <!--black outline box begins here -->
-    <center>
-    <h2>Sign up</h2>
-    <p>Already a user?<a href="{% url 'ecommerce:login_user' %}">Login</a></p>
-    <form method="post">
-      {% csrf_token %}
-      {% for field in form %}
-        <div class="form-group">
-
-            <div class="col-sm-offset-2 col-sm-10">
-                <span class="text-danger small">{{ field.errors }}
-                </span>
-            </div>
-
-            <div class="inputbox">
-                <label class="control-label col-sm-2" >{{ field.label_tag }}
-                </label>
-            <div class="col-sm-10">{{ field }}</div>
-            </div>
-
+<div class="box vertical-align" style="margin-top:150px;margin-bottom:100px;">
+<h2>Sign up</h2>
+    <h3 style="color:white;">
+        <span>Already a user? </span><a href="{% url 'ecommerce:login_user' %}">Login</a>
+    </h3>
+<form method="post">
+  {% csrf_token %}
+  {% for field in form %}
+    <div class="inputbox container">
+    <div class="col-lg-12 form-group" style="margin-top:20px;">
+        <div class="col-sm-offset-2 col-sm-10">
+            <span class="text-danger small">{{ field.errors }}</span>
         </div>
-      {% endfor %}
-      <button class="btn btn-dark" type="submit">Sign up</button>
-    </form>
-
-</center>
-</div>  <!--black outline box ends here -->
-
+        <label class="control-label col-sm-2" >{{ field.label_tag }}</label>
+        <div class="col-lg-10" style="margin-left:100px;">{{ field }}</div>
+    </div>
+    </div>
+  {% endfor %}
+    <center>
+        <button type="submit" class="btn btn-outline-primary">Sign Up</button>
+    </center>
+</form>
+</div>
 
 </body>
 </html>

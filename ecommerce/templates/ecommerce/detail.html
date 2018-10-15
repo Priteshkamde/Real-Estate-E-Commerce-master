@@ -1,98 +1,78 @@
+{% extends 'ecommerce/base.html' %}
+{% block title %}Home{% endblock %}
+
+{% block body %}
 {% load static %}
-<html>
-<head>
-    <link rel="stylesheet" href="{% static 'css/stylesearch.css' %}">
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-            crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-            crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-            crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-</head>
-
-<body>
-<div class="card text-white bg-primary">
-    <div class="card-header">
-        {% if user.is_authenticated %}
-        <p class="lead">Signed in as <span class="badge badge-dark">{{ user.username }}</span>
-        </p>
-    </div>
-</div>
+<div class="card text-left text-white bg-dark border-black" align="left">
 
 
-<nav class="navbar navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">REES</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-
-
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'ecommerce:dashboard' %}">Dashboard</a>
-            </li>
-
-
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'ecommerce:logout_user' %}">Logout</a>
-            </li>
-
-
-            {% else %}
-
-            <li class="nav-item">
-                <a class="btn btn-outline-dark text-center" href="{% url 'ecommerce:login_user' %}">Login</a>
-            </li>
-            {% endif %}
-            {% ifequal user.type 'seller' %}
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'ecommerce:post_property' %}">Post</a>
-            </li>
-            {% endifequal %}
-        </ul>
-
-    </div>
-</nav>
-
-<hr>
-
-<form method="post" action="#" id="post_property" enctype="multipart/form-data">
-    <div class="form-group col-md-3">
-    <select class="form-control" id="exampleFormControlSelect1" id="sort" name="sort">
-        <option value="relevance">Relevance</option>
-        <option value="price_low_high">Price - Low to High</option>
-        <option value="price_high_low">Price - High to Low</option>
-        <option value="sqft_low_high">Area - Low to High</option>
-        <option value="sqft_high_low">Area - High to Low</option>
-        <option value="latest">Most Recent</option>
-    </select>
-    </div>
-    <div class="col-12 col-md-3">
-        <button type="submit" class="btn btn-block btn-lg btn-primary">Sort</button>
+<form method="post" class="form-inline">
+    <input name="sort_filter" value="sort" hidden="hidden"/>
+    <div class="form-group text-white" style="margin-left:10px;">
+        {% csrf_token %}
+        <label for="sort">Sort By:&ensp;&nbsp;</label>
+        <select id="sort" name="sort" style="margin-right:10px;">
+            <option value="relevance">Relevance</option>
+            <option value="price_low_high">Price - Low to High</option>
+            <option value="price_high_low">Price - High to Low</option>
+            <option value="sqft_low_high">Area - Low to High</option>
+            <option value="sqft_high_low">Area - High to Low</option>
+            <option value="latest">Most Recent</option>
+        </select>
+        <button type="submit" class="btn btn-primary">Sort</button>
     </div>
 </form>
 
-
-<div class="jumbotron">
-  <div class="container">
-    <h1 class="display-10">Properties are </h1>
-        <ul>
-            {% for property in properties %}
-                <li><a href="{% url 'ecommerce:property_details' pk=property.id %}">{{ property }}</a></li>
-            {% endfor %}
-        </ul>
-  </div>
+<form method="post" class="form-inline">
+    <input name="sort_filter" value="filter" hidden="hidden"/>
+    <div class="form-group text-white">
+        {% csrf_token %}
+        {% for field in form %}
+        {{ field.label_tag }}
+        <div class="form-group">
+            <div class="col-sm-10">{{ field }}</div>
+        </div>
+        {% endfor %}
+    </div>
+    <button type="submit" class="btn btn-primary">Filter</button>
+</form>
 </div>
 
+<div class="container">
 
-</body>
-</html>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card mt-4">
+                <ul class="list-group">
+                    {% for image in images %}
+                    <li class="list-group-item inline">
+                        <div class="row">
+                            <div class="image-container"
+                                 style="height:200px;width:300px;margin-right:20px;margin-left:10px;">
+                                <img src="{{ image.image.url }}" style="height:100%;width:100%;">
+                            </div>
+                            <div>
+                                <h2><strong><a href="{% url 'ecommerce:property_details' pk=image.post.id %}">
+                                    {{ image.post }}</a></strong></h2>
+                                <small>Property for {{ image.post.buy_rent }}</small>
+                                <br>
+                                <small>{{ image.post.property_type }}</small>
+                                <h5>in {{ image.post.locality }}</h5>
+                                <h6>{{ image.post.construction_status }}</h6>
+                                <small>{{ image.post.area }} sq. ft.</small>
+                                <h3>&#x20b9; {{ image.post.price }}</h3>
+                                <small>
+                                    <small>Posted on {{ image.post.post_date_time }}</small>
+                                </small>
+                            </div>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

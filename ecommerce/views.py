@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_list_or_404, get_object_or_404
 from django.core.mail import send_mail
 from django.contrib.auth import authenticate, login, logout
-from .forms import CustomUserCreationForm, PropertyPostForm
+from .forms import CustomUserCreationForm, PropertyPostForm, FilterResultsForm
 from .models import Properties, Comments, ImageElement
 import time
 
@@ -11,30 +11,215 @@ def index(request):
 
 
 def detail(request):
+    form = FilterResultsForm(request.POST or None)
     search = request.GET['q']
     properties = get_list_or_404(Properties, locality=search)
     images = []
+    images_filter = []
     for property in properties:
         images.append(ImageElement.objects.filter(post=property).first())
 
     if request.method == 'POST':
-        value = request.POST['sort']
-        if value == 'relevance':
-            images = sorted(images, key=lambda image: image.post.property_title)
-        elif value == 'price_low_to_high':
-            images = sorted(images, key=lambda image: image.post.price)
-        elif value == 'price_high_low':
-            images = reversed(sorted(images, key=lambda image: image.post.price))
-        elif value == 'sqft_low_high':
-            images = sorted(images, key=lambda image: image.post.area)
-        elif value == 'sqft_high_low':
-            images = reversed(sorted(images, key=lambda image: image.post.area))
-        elif value == 'latest':
-            images = sorted(images, key=lambda image: image.post.post_date_time)
+        if request.POST['sort_filter'] == "filter":
+            property_type = request.POST['property_type']
+            bhk = request.POST['BHK']
+            price = request.POST['price']
+            construction_status = request.POST['construction_status']
+            area = request.POST['area']
 
-        return render(request, 'ecommerce/detail.html', {'properties': properties, 'images': images})
+            if property_type != 'No Preference':
+                if bhk != 'No Preference':
+                    if price != 'No Preference':
+                        if construction_status != 'No Preference':
+                            if area != 'No Preference':
+                                properties_filter = get_list_or_404(Properties, locality=search,
+                                                                    property_type=property_type,
+                                                                    BHK=bhk, price=price,
+                                                                    construction_status=construction_status,
+                                                                    area=area)
+                            else:
+                                properties_filter = get_list_or_404(Properties, locality=search,
+                                                                    property_type=property_type,
+                                                                    BHK=bhk, price=price,
+                                                                    construction_status=construction_status)
+                        else:
+                            if area != 'No Preference':
+                                properties_filter = get_list_or_404(Properties, locality=search,
+                                                                    property_type=property_type,
+                                                                    BHK=bhk, price=price,
+                                                                    area=area)
+                            else:
+                                properties_filter = get_list_or_404(Properties, locality=search,
+                                                                    property_type=property_type,
+                                                                    BHK=bhk, price=price)
+                    else:
+                        if construction_status != 'No Preference':
+                            if area != 'No Preference':
+                                properties_filter = get_list_or_404(Properties, locality=search,
+                                                                    property_type=property_type,
+                                                                    BHK=bhk,
+                                                                    construction_status=construction_status,
+                                                                    area=area)
+                            else:
+                                properties_filter = get_list_or_404(Properties, locality=search,
+                                                                    property_type=property_type,
+                                                                    BHK=bhk,
+                                                                    construction_status=construction_status)
+                        else:
+                            if area != 'No Preference':
+                                properties_filter = get_list_or_404(Properties, locality=search,
+                                                                    property_type=property_type,
+                                                                    BHK=bhk,
+                                                                    area=area)
+                            else:
+                                properties_filter = get_list_or_404(Properties, locality=search,
+                                                                    property_type=property_type,
+                                                                    BHK=bhk)
+                else:
+                    if price != 'No Preference':
+                        if construction_status != 'No Preference':
+                            if area != 'No Preference':
+                                properties_filter = get_list_or_404(Properties, locality=search,
+                                                                    property_type=property_type, price=price,
+                                                                    construction_status=construction_status,
+                                                                    area=area)
+                            else:
+                                properties_filter = get_list_or_404(Properties, locality=search,
+                                                                    property_type=property_type, price=price,
+                                                                    construction_status=construction_status)
+                        else:
+                            if area != 'No Preference':
+                                properties_filter = get_list_or_404(Properties, locality=search,
+                                                                    property_type=property_type, price=price,
+                                                                    area=area)
+                            else:
+                                properties_filter = get_list_or_404(Properties, locality=search,
+                                                                    property_type=property_type, price=price)
+                    else:
+                        if construction_status != 'No Preference':
+                            if area != 'No Preference':
+                                properties_filter = get_list_or_404(Properties, locality=search,
+                                                                    property_type=property_type,
+                                                                    construction_status=construction_status,
+                                                                    area=area)
+                            else:
+                                properties_filter = get_list_or_404(Properties, locality=search,
+                                                                    property_type=property_type,
+                                                                    construction_status=construction_status)
+                        else:
+                            if area != 'No Preference':
+                                properties_filter = get_list_or_404(Properties, locality=search,
+                                                                    property_type=property_type,
+                                                                    area=area)
+                            else:
+                                properties_filter = get_list_or_404(Properties, locality=search,
+                                                                    property_type=property_type)
+            else:
+                if bhk != 'No Preference':
+                    if price != 'No Preference':
+                        if construction_status != 'No Preference':
+                            if area != 'No Preference':
+                                properties_filter = get_list_or_404(Properties, locality=search,
+                                                                    property_type=property_type,
+                                                                    BHK=bhk, price=price,
+                                                                    construction_status=construction_status,
+                                                                    area=area)
+                            else:
+                                properties_filter = get_list_or_404(Properties, locality=search,
+                                                                    property_type=property_type,
+                                                                    BHK=bhk, price=price,
+                                                                    construction_status=construction_status)
+                        else:
+                            if area != 'No Preference':
+                                properties_filter = get_list_or_404(Properties, locality=search,
+                                                                    property_type=property_type,
+                                                                    BHK=bhk, price=price,
+                                                                    area=area)
+                            else:
+                                properties_filter = get_list_or_404(Properties, locality=search,
+                                                                    property_type=property_type,
+                                                                    BHK=bhk, price=price)
+                    else:
+                        if construction_status != 'No Preference':
+                            if area != 'No Preference':
+                                properties_filter = get_list_or_404(Properties, locality=search,
+                                                                    property_type=property_type,
+                                                                    BHK=bhk,
+                                                                    construction_status=construction_status,
+                                                                    area=area)
+                            else:
+                                properties_filter = get_list_or_404(Properties, locality=search,
+                                                                    property_type=property_type,
+                                                                    BHK=bhk,
+                                                                    construction_status=construction_status)
+                        else:
+                            if area != 'No Preference':
+                                properties_filter = get_list_or_404(Properties, locality=search,
+                                                                    property_type=property_type,
+                                                                    BHK=bhk,
+                                                                    area=area)
+                            else:
+                                properties_filter = get_list_or_404(Properties, locality=search,
+                                                                    property_type=property_type,
+                                                                    BHK=bhk)
+                else:
+                    if price != 'No Preference':
+                        if construction_status != 'No Preference':
+                            if area != 'No Preference':
+                                properties_filter = get_list_or_404(Properties, locality=search, price=price,
+                                                                    construction_status=construction_status,
+                                                                    area=area)
+                            else:
+                                properties_filter = get_list_or_404(Properties, locality=search, price=price,
+                                                                    construction_status=construction_status)
+                        else:
+                            if area != 'No Preference':
+                                properties_filter = get_list_or_404(Properties, locality=search, price=price,
+                                                                    area=area)
+                            else:
+                                properties_filter = get_list_or_404(Properties, locality=search, price=price)
+                    else:
+                        if construction_status != 'No Preference':
+                            if area != 'No Preference':
+                                properties_filter = get_list_or_404(Properties, locality=search,
+                                                                    construction_status=construction_status,
+                                                                    area=area)
+                            else:
+                                properties_filter = get_list_or_404(Properties, locality=search,
+                                                                    construction_status=construction_status)
+                        else:
+                            if area != 'No Preference':
+                                properties_filter = get_list_or_404(Properties, locality=search,
+                                                                    area=area)
+                            else:
+                                properties_filter = get_list_or_404(Properties, locality=search)
 
-    return render(request, 'ecommerce/detail.html', {'properties': properties, 'images': images})
+
+
+            for property in properties_filter:
+                images_filter.append(ImageElement.objects.filter(post=property).first())
+
+            return render(request, 'ecommerce/detail.html', {'properties': properties_filter, 'images': images_filter,
+                                                             'form': form})
+
+        elif request.POST['sort_filter'] == "sort":
+            value = request.POST['sort']
+            if value == 'relevance':
+                images = sorted(images, key=lambda image: image.post.property_title)
+            elif value == 'price_low_to_high':
+                images = sorted(images, key=lambda image: image.post.price)
+            elif value == 'price_high_low':
+                images = reversed(sorted(images, key=lambda image: image.post.price))
+            elif value == 'sqft_low_high':
+                images = sorted(images, key=lambda image: image.post.area)
+            elif value == 'sqft_high_low':
+                images = reversed(sorted(images, key=lambda image: image.post.area))
+            elif value == 'latest':
+                images = reversed(sorted(images, key=lambda image: image.post.post_date_time))
+
+            return render(request, 'ecommerce/detail.html', {'properties': properties, 'images': images, 'form': form})
+
+    return render(request, 'ecommerce/detail.html', {'properties': properties, 'images': images, 'form': form})
 
 
 def property_detail(request, pk):

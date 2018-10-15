@@ -16,6 +16,10 @@ class CustomUserCreationForm(UserCreationForm):
         model = CustomUser
         fields = ('username', 'first_name', 'last_name', 'email', 'contact', 'type')
 
+    def __init__(self, *args, **kwargs):
+        super(CustomUserCreationForm, self).__init__(*args, **kwargs)
+        self.fields['type'].widget.attrs.update({'style': 'margin-top:50px;'})
+
 
 class CustomUserChangeForm(UserChangeForm):
     email = forms.EmailField(required=True)
@@ -27,7 +31,6 @@ class CustomUserChangeForm(UserChangeForm):
     class Meta:
         model = CustomUser
         fields = ('username', 'first_name', 'last_name', 'email', 'contact', 'type')
-
 
 
 class PropertyPostForm(forms.ModelForm):
@@ -48,4 +51,19 @@ class PropertyPostForm(forms.ModelForm):
         fields = (
             'property_title', 'locality', 'property_type', 'price', 'BHK', 'construction_status', 'area',
             'address', 'description'
+        )
+
+
+class FilterResultsForm(forms.ModelForm):
+    property_type = forms.ChoiceField(choices=PROPERTY_TYPE_CHOICES_FILTER, widget=forms.Select(), label='Property Type')
+    price = forms.ChoiceField(choices=PRICE_CHOICES_FILTER, label='Price')
+    construction_status = forms.ChoiceField(choices=CONSTRUCTION_STATUS_CHOICES_FILTER, widget=forms.Select(),
+                                            label='Construction Status')
+    BHK = forms.ChoiceField(choices=BHK_CHOICES_FILTER, widget=forms.Select(), label='BHK', required=False)
+    area = forms.ChoiceField(choices=AREA_CHOICES_FILTER, label="Area")
+
+    class Meta:
+        model = Properties
+        fields = (
+            'property_type', 'BHK', 'price', 'construction_status', 'area'
         )

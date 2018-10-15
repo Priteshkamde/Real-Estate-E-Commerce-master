@@ -14,6 +14,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
             integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
             crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -22,13 +23,12 @@
 <body>
 
 
+
 <!--name of user card-->
 {% if user.is_authenticated %}
-<div class="card text-white bg-primary">
-    <div class="card-header">
+<div class="card text-left text-white bg-primary" align="left">
         <p class="lead">Signed in as <span class="badge badge-dark">{{ user.username }}</span>
         </p>
-    </div>
 </div>
 {% endif %}
 <!--till here name card-->
@@ -63,10 +63,8 @@
                     <a class="nav-link" href="{% url 'ecommerce:post_property' %}">Post</a>
                 </li>
             {% endifequal %}
-        </ul>
 
          {% else %}
-        <ul>
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'ecommerce:dashboard' %}" aria-disabled="true">Dashboard</a>
             </li>
@@ -74,14 +72,13 @@
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'ecommerce:login_user' %}">Login</a>
             </li>
-        </ul>
-         {% endif %}
 
+         {% endif %}
+        </ul>
     </div>
 </nav>
 
 <!-- toggle navbar ends-->
-
 
 {% block body %}
 {% endblock %}
