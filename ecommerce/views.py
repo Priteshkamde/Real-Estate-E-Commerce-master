@@ -194,8 +194,6 @@ def detail(request):
                             else:
                                 properties_filter = get_list_or_404(Properties, locality=search)
 
-
-
             for property in properties_filter:
                 images_filter.append(ImageElement.objects.filter(post=property).first())
 
@@ -279,8 +277,10 @@ def post_property(request):
 
 
 def dashboard(request):
-    properties = Properties.objects.all()
-    return render(request, 'ecommerce/dashboard.html', {'properties': properties})
+    if request.user.type == 'seller' or request.user.type == 'lessor':
+        properties = get_list_or_404(Properties, user=request.user)
+        return render(request, 'ecommerce/dashboard.html', {'properties': properties})
+    return render(request, 'ecommerce/dashboard.html')
 
 
 def login_user(request):

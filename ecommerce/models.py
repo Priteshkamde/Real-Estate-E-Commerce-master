@@ -35,7 +35,7 @@ class Properties(models.Model):
 
 class ImageElement(models.Model):
     post = models.ForeignKey(Properties, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='media/', null=True, blank=True, default='media/media/download.jpg')
+    image = models.ImageField(upload_to='media/', blank=True, default='media/placeholder-image.jpg')
 
 
 class Comments(models.Model):

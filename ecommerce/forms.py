@@ -42,7 +42,7 @@ class PropertyPostForm(forms.ModelForm):
     BHK = forms.ChoiceField(choices=BHK_CHOICES, widget=forms.Select(), label='BHK', required=False)
     construction_status = forms.ChoiceField(choices=CONSTRUCTION_STATUS_CHOICES, widget=forms.Select(),
                                             label='Construction Status', required=True)
-    area = forms.CharField(label="Area", required=True)
+    area = forms.CharField(label="Area (Sq. Ft.)", required=True)
     address = forms.CharField(widget=forms.Textarea(), label='Address', required=True)
     description = forms.CharField(widget=forms.Textarea(), label='Description', required=False)
 
@@ -56,14 +56,12 @@ class PropertyPostForm(forms.ModelForm):
 
 class FilterResultsForm(forms.ModelForm):
     property_type = forms.ChoiceField(choices=PROPERTY_TYPE_CHOICES_FILTER, widget=forms.Select(), label='Property Type')
-    price = forms.ChoiceField(choices=PRICE_CHOICES_FILTER, label='Price')
     construction_status = forms.ChoiceField(choices=CONSTRUCTION_STATUS_CHOICES_FILTER, widget=forms.Select(),
                                             label='Construction Status')
     BHK = forms.ChoiceField(choices=BHK_CHOICES_FILTER, widget=forms.Select(), label='BHK', required=False)
-    area = forms.ChoiceField(choices=AREA_CHOICES_FILTER, label="Area")
 
     class Meta:
         model = Properties
         fields = (
-            'property_type', 'BHK', 'price', 'construction_status', 'area'
+            'property_type', 'BHK', 'construction_status'
         )
