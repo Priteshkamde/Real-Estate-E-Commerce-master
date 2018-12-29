@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_list_or_404, get_object_or_404
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMultiAlternatives
 from django.contrib.auth import authenticate, login, logout
 from .forms import CustomUserCreationForm, PropertyPostForm, FilterResultsForm
 from .models import Properties, Comments, ImageElement
